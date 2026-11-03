@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SE Shop | Scientific Electric Shop</title>
+<style>
+:root{--blue:#155eef;--navy:#101828;--muted:#667085;--line:#eaecf0;--bg:#f7f9fc}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;color:var(--navy);background:#fff}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.top{display:flex;align-items:center;gap:22px;padding:18px 4%;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:5}
+.brand{font-size:27px;font-weight:800;color:var(--blue);white-space:nowrap}.brand small{display:block;font-size:10px;letter-spacing:2px;color:#667085}
+.search{flex:1;display:flex;border:1px solid #d0d5dd;border-radius:12px;overflow:hidden}.search input{width:100%;border:0;padding:14px;outline:0}.search button{background:#fff;color:var(--blue);padding:0 16px;font-size:20px}
+.actions{display:flex;gap:10px}.btn{padding:11px 16px;border-radius:9px;background:var(--blue);color:white;font-weight:600}.btn.light{background:#eff4ff;color:var(--blue)}.btn.dark{background:#101828}
+nav{display:flex;gap:26px;padding:14px 4%;border-bottom:1px solid var(--line);overflow:auto}nav a{color:#344054;text-decoration:none;white-space:nowrap;font-size:14px}nav a:hover{color:var(--blue)}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:22px;padding:24px 4%}
+aside{border:1px solid var(--line);border-radius:12px;padding:16px;height:max-content}aside h3{margin:0 0 12px} .cat{display:block;width:100%;text-align:left;background:#fff;padding:11px 9px;border-radius:8px;color:#344054}.cat:hover,.cat.active{background:#eff4ff;color:var(--blue)}
+.hero{background:linear-gradient(110deg,#edf3ff,#f7f9ff);border-radius:16px;min-height:235px;padding:34px;display:flex;align-items:center;justify-content:space-between;gap:20px}.hero .eyebrow{color:var(--blue);font-weight:bold;font-size:13px}.hero h1{font-size:clamp(27px,4vw,42px);margin:12px 0}.hero p{color:#475467;line-height:1.6;max-width:480px}.hero-art{font-size:76px;white-space:nowrap}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 28px}.feature{border:1px solid var(--line);border-radius:11px;padding:15px;text-align:center;color:#475467;font-size:14px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:20px 0 14px}.section-head h2{font-size:21px;margin:0}.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.product{border:1px solid var(--line);border-radius:13px;padding:12px;min-width:0;transition:.2s}.product:hover{box-shadow:0 8px 24px #10182812;transform:translateY(-2px)}.photo{height:150px;background:#f7f8fa;border-radius:9px;display:flex;align-items:center;justify-content:center;overflow:hidden}.photo img{width:100%;height:100%;object-fit:contain}.placeholder{font-size:55px}.product h3{font-size:15px;margin:12px 0 6px}.price{font-weight:bold;color:var(--blue);margin:7px 0 12px}.product .btn{width:100%;padding:10px}.empty{padding:30px;text-align:center;color:var(--muted);grid-column:1/-1;border:1px dashed var(--line);border-radius:12px}
+footer{margin-top:40px;background:#101828;color:#fff;padding:30px 4%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}footer p{color:#d0d5dd;margin-bottom:0}
+.modal{display:none;position:fixed;inset:0;background:#10182888;z-index:20;align-items:center;justify-content:center;padding:15px}.modal.show{display:flex}.dialog{background:#fff;border-radius:15px;padding:22px;width:min(560px,100%);max-height:90vh;overflow:auto}.dialog h2{margin-top:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:bold;color:#344054}.field input,.field textarea,.field select{border:1px solid #d0d5dd;border-radius:8px;padding:11px;width:100%}.field textarea{min-height:75px}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:14px}.close{float:right;background:#f2f4f7;border-radius:7px;padding:7px 11px}
+.adminbar{display:none;background:#fff8e6;padding:10px 4%;border-bottom:1px solid #fedf89;align-items:center;justify-content:space-between;gap:10px}.adminbar.show{display:flex}.small{font-size:12px;color:var(--muted)}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.layout aside{order:2}.products{grid-template-columns:repeat(3,1fr)}.hero-art{font-size:55px}}
+@media(max-width:600px){.top{flex-wrap:wrap;gap:12px}.brand{font-size:22px}.search{order:3;flex-basis:100%}.actions{margin-left:auto}.actions .btn{padding:9px 11px;font-size:12px}nav{gap:18px}.layout{padding:16px 4%}.hero{padding:22px;min-height:200px}.hero-art{font-size:38px}.features{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.photo{height:125px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="brand">SE SHOP<small>SCIENTIFIC ELECTRIC SHOP</small></div>
+ <div class="search"><input id="search" placeholder="পণ্য খুঁজুন / Search products..." oninput="renderProducts()"><button aria-label="Search">⌕</button></div>
+ <div class="actions"><button class="btn light" onclick="openCart()">কার্ট (<span id="cartCount">0</span>)</button><button class="btn" onclick="adminEntry()">Admin</button></div>
+</header>
+<div class="adminbar" id="adminbar"><span>অ্যাডমিন মোড চালু — এখানে আপনার পণ্য যোগ, পরিবর্তন বা মুছতে পারবেন।</span><div><button class="btn" onclick="openProductForm()">+ পণ্য যোগ</button> <button class="btn dark" onclick="logout()">লগআউট</button></div></div>
+<nav><a href="#">হোম</a><a href="#products">সব পণ্য</a><a href="#categories">ক্যাটাগরি</a><a href="#contact">যোগাযোগ</a></nav>
+<div class="layout">
+<aside id="categories"><h3>ক্যাটাগরি</h3><button class="cat active" onclick="setCategory('সব')">সব পণ্য</button><button class="cat" onclick="setCategory('Scientific')">Scientific</button><button class="cat" onclick="setCategory('Electrical')">Electrical</button><button class="cat" onclick="setCategory('Accessories')">Accessories</button><hr style="border:0;border-top:1px solid #eee;margin:14px 0"><p class="small">নতুন পণ্য দেখতে সার্চ ব্যবহার করুন।</p></aside>
+<main>
+<section class="hero"><div><div class="eyebrow">WELCOME TO SE SHOP</div><h1>আপনার প্রয়োজনীয় পণ্য, এক জায়গায়</h1><p>Scientific ও Electrical পণ্যের সহজ অনলাইন শপিং। পণ্য বেছে অর্ডার করুন সরাসরি WhatsApp-এ।</p><button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">পণ্য দেখুন</button></div><div class="hero-art">🔬 ⚡</div></section>
+<div class="features"><div class="feature">🚚 সহজ অর্ডার</div><div class="feature">💬 WhatsApp-এ যোগাযোগ</div><div class="feature">🤝 সরাসরি সহায়তা</div></div>
+<div class="section-head" id="products"><h2>আমাদের পণ্য</h2><span class="small" id="productCount"></span></div>
+<div class="products" id="productGrid"></div>
+</main>
+</div>
+<footer id="contact"><div><strong style="font-size:22px">SE SHOP</strong><p>Scientific Electric Shop</p></div><div><strong>যোগাযোগ</strong><p>WhatsApp: 01326955318</p><p>অর্ডার করতে পণ্য নির্বাচন করুন।</p></div></footer>
+
+<div class="modal" id="productModal"><div class="dialog"><button class="close" onclick="closeModal('productModal')">✕</button><h2 id="formTitle">নতুন পণ্য যোগ করুন</h2>
+<form id="productForm"><input type="hidden" id="editId"><div class="formgrid">
+<div class="field full"><label>পণ্যের নাম *</label><input id="pName" required placeholder="যেমন: Digital Multimeter"></div>
+<div class="field"><label>দাম (৳) *</label><input id="pPrice" type="number" min="0" required placeholder="1200"></div>
+<div class="field"><label>ক্যাটাগরি</label><select id="pCategory"><option>Scientific</option><option>Electrical</option><option>Accessories</option></select></div>
+<div class="field full"><label>পণ্যের ছবি</label><input id="pImage" type="file" accept="image/*"><span class="small">আপনার কম্পিউটার থেকে ছবি বেছে নিন। ছবি না দিলে ডিফল্ট আইকন দেখাবে।</span></div>
+<div class="field full"><label>বিবরণ</label><textarea id="pDesc" placeholder="পণ্যের সংক্ষিপ্ত বিবরণ"></textarea></div>
+</div><div class="modal-actions"><button type="button" class="btn light" onclick="closeModal('productModal')">বাতিল</button><button class="btn" type="submit">সেভ করুন</button></div></form></div></div>
+
+<div class="modal" id="cartModal"><div class="dialog"><button class="close" onclick="closeModal('cartModal')">✕</button><h2>আপনার অর্ডার</h2><div id="cartItems"></div><div class="field"><label>আপনার নাম *</label><input id="customerName" placeholder="নাম লিখুন"></div><div class="field"><label>মোবাইল নম্বর *</label><input id="customerPhone" placeholder="01XXXXXXXXX"></div><div class="field"><label>ঠিকানা *</label><textarea id="customerAddress" placeholder="সম্পূর্ণ ঠিকানা লিখুন"></textarea></div><div class="modal-actions"><button class="btn light" onclick="closeModal('cartModal')">বন্ধ করুন</button><button class="btn" onclick="sendOrder()">WhatsApp-এ অর্ডার পাঠান</button></div></div></div>
+<script>
+const WA_NUMBER='8801326955318';
+const starter=[
+{id:'s1',name:'Digital Multimeter',price:1250,category:'Electrical',desc:'ডিজিটাল মাল্টিমিটার',image:'',emoji:'⚡'},
+{id:'s2',name:'Laboratory Beaker',price:450,category:'Scientific',desc:'ল্যাবরেটরি বিকার',image:'',emoji:'🧪'},
+{id:'s3',name:'Measuring Cylinder',price:650,category:'Scientific',desc:'মেজারিং সিলিন্ডার',image:'',emoji:'🔬'},
+{id:'s4',name:'Electrical Tester',price:180,category:'Accessories',desc:'ইলেকট্রিক্যাল টেস্টার',image:'',emoji:'🪛'}
+];
+let products=JSON.parse(localStorage.getItem('seshop_products')||'null')||starter;
+let cart=[];let activeCategory='সব';let isAdmin=false;
+function save(){try{localStorage.setItem('seshop_products',JSON.stringify(products))}catch(e){alert('ছবির সাইজ বেশি হয়েছে। ছোট ছবি ব্যবহার করুন।')}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderProducts(){
+ const q=document.getElementById('search').value.toLowerCase();
+ const list=products.filter(p=>(activeCategory==='সব'||p.category===activeCategory)&&(p.name+' '+p.desc+' '+p.category).toLowerCase().includes(q));
+ document.getElementById('productCount').textContent=list.length+'টি পণ্য';
+ const grid=document.getElementById('productGrid');
+ if(!list.length){grid.innerHTML='<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';return}
+ grid.innerHTML=list.map(p=>`<article class="product"><div class="photo">${p.image?`<img src="${p.image}" alt="${esc(p.name)}">`:`<span class="placeholder">${p.emoji||'📦'}</span>`}</div><h3>${esc(p.name)}</h3><div class="small">${esc(p.category)} · ${esc(p.desc)}</div><div class="price">৳${Number(p.price).toLocaleString('en-BD')}</div><button class="btn" onclick="addCart('${p.id}')">অর্ডার করুন</button>${isAdmin?`<div style="display:flex;gap:7px;margin-top:8px"><button class="btn light" style="flex:1" onclick="editProduct('${p.id}')">এডিট</button><button class="btn dark" style="flex:1" onclick="deleteProduct('${p.id}')">ডিলিট</button></div>`:''}</article>`).join('');
+}
+function setCategory(c){activeCategory=c;document.querySelectorAll('.cat').forEach(b=>b.classList.toggle('active',b.textContent.trim()===(c==='সব'?'সব পণ্য':c)));renderProducts()}
+function adminEntry(){if(isAdmin){openProductForm();return}const pw=prompt('অ্যাডমিন পাসওয়ার্ড লিখুন:');if(pw===null)return;if(pw==='SEshop2026'){isAdmin=true;document.getElementById('adminbar').classList.add('show');renderProducts();openProductForm()}else alert('পাসওয়ার্ড সঠিক নয়।')}
+function logout(){isAdmin=false;document.getElementById('adminbar').classList.remove('show');renderProducts()}
+function openProductForm(p=null){document.getElementById('productForm').reset();document.getElementById('editId').value=p?.id||'';document.getElementById('formTitle').textContent=p?'পণ্য পরিবর্তন করুন':'নতুন পণ্য যোগ করুন';if(p){pName.value=p.name;pPrice.value=p.price;pCategory.value=p.category;pDesc.value=p.desc||''}document.getElementById('productModal').classList.add('show')}
+function editProduct(id){const p=products.find(x=>x.id===id);if(p)openProductForm(p)}
+function deleteProduct(id){if(confirm('এই পণ্যটি মুছে ফেলবেন?')){products=products.filter(p=>p.id!==id);save();renderProducts()}}
+document.getElementById('productForm').addEventListener('submit',async e=>{e.preventDefault();const id=editId.value;let old=products.find(p=>p.id===id);let image=old?.image||'';const file=pImage.files[0];if(file){if(file.size>1500000){alert('১.৫ MB-এর ছোট ছবি দিন।');return}image=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+const p={id:id||'p'+Date.now(),name:pName.value.trim(),price:Number(pPrice.value),category:pCategory.value,desc:pDesc.value.trim(),image,emoji:'📦'};
+if(id)products=products.map(x=>x.id===id?p:x);else products.unshift(p);save();renderProducts();closeModal('productModal')});
+function addCart(id){const p=products.find(x=>x.id===id);if(p){cart.push(p);document.getElementById('cartCount').textContent=cart.length;alert('পণ্যটি অর্ডার তালিকায় যোগ হয়েছে।')}}
+function openCart(){document.getElementById('cartItems').innerHTML=cart.length?cart.map((p,i)=>`<p>${i+1}. ${esc(p.name)} — ৳${Number(p.price).toLocaleString('en-BD')}</p>`).join('')+'<hr><b>মোট: ৳'+cart.reduce((s,p)=>s+Number(p.price),0).toLocaleString('en-BD')+'</b>':'<p>আপনার অর্ডার তালিকা খালি। আগে পণ্য নির্বাচন করুন।</p>';document.getElementById('cartModal').classList.add('show')}
+function sendOrder(){if(!cart.length){alert('আগে পণ্য নির্বাচন করুন।');return}const name=customerName.value.trim(),phone=customerPhone.value.trim(),address=customerAddress.value.trim();if(!name||!phone||!address){alert('নাম, মোবাইল নম্বর ও ঠিকানা পূরণ করুন।');return}let lines=cart.map((p,i)=>`${i+1}. ${p.name} - ৳${p.price}`).join('\n');let total=cart.reduce((s,p)=>s+Number(p.price),0);let msg=`SE SHOP-এ নতুন অর্ডার\n\n${lines}\n\nমোট: ৳${total}\n\nক্রেতার নাম: ${name}\nমোবাইল: ${phone}\nঠিকানা: ${address}`;window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg),'_blank')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+renderProducts();
+</script>
+</body></html>
